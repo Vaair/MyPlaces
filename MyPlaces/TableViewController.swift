@@ -55,9 +55,31 @@ class TableViewController: UITableViewController {
     
     // MARK: - Table view delegate
     
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 85
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            let place = places[indexPath.row]
+            StorageManager.deleteObject(place)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+        }
     }
+   
+    
+//    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        return 85
+//    }
+    
+//    //избыточный способ (несколько действий)
+//    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? //действие при swipe справа налево
+//    {
+//        let place = places[indexPath.row]
+//
+//        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { (_, _, _) in
+//            StorageManager.deleteObject(place)
+//            tableView.deleteRows(at: [indexPath], with: .automatic)
+//        }
+//        return UISwipeActionsConfiguration(actions: [deleteAction])
+//    }
+    
     /*
      // MARK: - Navigation
      

@@ -86,6 +86,7 @@ class NewPlaceTableViewController: UITableViewController {
                              imageData: imageData)
         
         StorageManager.saveObject(newPlace)
+        
 //        newPlace = Place(name: placeName.text!, //когда была структурой
 //                         location: placeLocation.text,
 //                         type: placeType.text,
