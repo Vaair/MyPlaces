@@ -7,16 +7,19 @@
 //
 
 import UIKit
+import RealmSwift
 
 class TableViewController: UITableViewController {
     
-    let places = Place.getPlaces()
+    var places: Results<Place>! //отслеживание в реальном времени данных
+    
+    //var places = Place.getPlaces()
     
     override func viewDidLoad() {
         
         super.viewDidLoad()
         
-        
+        places = realm.objects(Place.self) //именно тип, а не саму бд
         
     }
     
@@ -24,20 +27,29 @@ class TableViewController: UITableViewController {
     
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return places.count
+        return places.isEmpty ? 0 : places.count
     }
     
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! CustomTableViewCell
-        
-        cell.nameLabel.text = places[indexPath.row].name
-        cell.locationLabel.text = places[indexPath.row].location
-        cell.typeLabel.text = places[indexPath.row].type
-        cell.imageOfPlace.image = UIImage(named: places[indexPath.row].image)
+
+        let place = places[indexPath.row]
+
+        cell.nameLabel.text = place.name
+        cell.locationLabel.text = place.location
+        cell.typeLabel.text = place.type
+        cell.imageOfPlace.image = UIImage(data: place.imageData!)
+
+//        if place.image == nil {
+//            cell.imageOfPlace.image = UIImage(named: place.restaurantImage!)
+//        } else {
+//            cell.imageOfPlace.image = place.image
+//        }
+
         cell.imageOfPlace.layer.cornerRadius = cell.imageOfPlace.frame.size.height / 2 //скругление image view
         cell.imageOfPlace.clipsToBounds = true //обрезка изображения
-        
+
         return cell
     }
     
@@ -56,6 +68,12 @@ class TableViewController: UITableViewController {
      }
      */
     
-    @IBAction func cancelAction(_ segue: UIStoryboardSegue) {} //выход с экрана редактирования
+    @IBAction func unwindSegue(_ segue: UIStoryboardSegue) { //выход с экрана редактирования и сохранение данных
+        guard let newPlaceVC = segue.source as? NewPlaceTableViewController else { return }
+        
+        newPlaceVC.saveNewPlace()
+      //  places.append(newPlaceVC.newPlace!) //передача данных с одного view  на другой
+        tableView.reloadData()
+    }
     
 }
