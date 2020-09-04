@@ -11,14 +11,26 @@ import RealmSwift
 
 class TableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
+    private let searchController = UISearchController(searchResultsController: nil) //отображение результатов на том же view controller
+    private var places: Results<Place>! //отслеживание в реальном времени данных
+    private var filteredPlaces: Results<Place>! //для отфильтрованных записей
+    private var ascendingSorting = true
+    private var searchBarIsEmpty: Bool {
+        guard let text = searchController.searchBar.text else { return false }
+        return text.isEmpty
+    }
+    
+    private var isFiltering: Bool{
+        return searchController.isActive && !searchBarIsEmpty
+    }
+    
+    //var places = Place.getPlaces()
+    
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     @IBOutlet weak var reversedSortingButton: UIBarButtonItem!
     
-    var places: Results<Place>! //отслеживание в реальном времени данных
-    var ascendingSorting = true
     
-    //var places = Place.getPlaces()
     
     override func viewDidLoad() {
         
@@ -26,35 +38,51 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         places = realm.objects(Place.self) //именно тип, а не саму бд
         
+        //setup the search controller
+        searchController.searchResultsUpdater = self //получатель результатов поиска
+        searchController.obscuresBackgroundDuringPresentation = false //записи будут предоставлятся как на основном экране
+        searchController.searchBar.placeholder = "Search"
+        navigationItem.searchController = searchController //строка поиска будет интегрирована в навигешн
+        definesPresentationContext = true //убирает стороку поиска при переходе на другой экран
+        
     }
     
     // MARK: - Table view data source
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if isFiltering {
+            return filteredPlaces.count
+        }
         return places.isEmpty ? 0 : places.count
     }
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! CustomTableViewCell
-
-        let place = places[indexPath.row]
-
+        
+        var place = Place()
+        
+        if isFiltering{
+            place = filteredPlaces[indexPath.row]
+        } else {
+            place = places[indexPath.row]
+        }
+        
         cell.nameLabel.text = place.name
         cell.locationLabel.text = place.location
         cell.typeLabel.text = place.type
         cell.imageOfPlace.image = UIImage(data: place.imageData!)
-
-//        if place.image == nil {
-//            cell.imageOfPlace.image = UIImage(named: place.restaurantImage!)
-//        } else {
-//            cell.imageOfPlace.image = place.image
-//        }
-
+        
+        //        if place.image == nil {
+        //            cell.imageOfPlace.image = UIImage(named: place.restaurantImage!)
+        //        } else {
+        //            cell.imageOfPlace.image = place.image
+        //        }
+        
         cell.imageOfPlace.layer.cornerRadius = cell.imageOfPlace.frame.size.height / 2 //скругление image view
         cell.imageOfPlace.clipsToBounds = true //обрезка изображения
-
+        
         return cell
     }
     
@@ -67,48 +95,53 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
             tableView.deleteRows(at: [indexPath], with: .automatic)
         }
     }
-   
-    
-//    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        return 85
-//    }
-    
-//    //избыточный способ (несколько действий)
-//    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? //действие при swipe справа налево
-//    {
-//        let place = places[indexPath.row]
-//
-//        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { (_, _, _) in
-//            StorageManager.deleteObject(place)
-//            tableView.deleteRows(at: [indexPath], with: .automatic)
-//        }
-//        return UISwipeActionsConfiguration(actions: [deleteAction])
-//    }
     
     
-     // MARK: - Navigation
-     
-     
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    //    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    //        return 85
+    //    }
+    
+    //    //избыточный способ (несколько действий)
+    //    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? //действие при swipe справа налево
+    //    {
+    //        let place = places[indexPath.row]
+    //
+    //        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { (_, _, _) in
+    //            StorageManager.deleteObject(place)
+    //            tableView.deleteRows(at: [indexPath], with: .automatic)
+    //        }
+    //        return UISwipeActionsConfiguration(actions: [deleteAction])
+    //    }
+    
+    
+    // MARK: - Navigation
+    
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showDetail" {
             guard let indexPath = tableView.indexPathForSelectedRow else { return }
-            let place = places[indexPath.row]
+            let place: Place
+            if isFiltering{
+                place = filteredPlaces[indexPath.row]
+            } else {
+                place = places[indexPath.row]
+            }
             let newPlacesVC = segue.destination as! NewPlaceTableViewController
             newPlacesVC.currentPlace = place
         }
-     }
+    }
     
     
     @IBAction func unwindSegue(_ segue: UIStoryboardSegue) { //выход с экрана редактирования и сохранение данных
         guard let newPlaceVC = segue.source as? NewPlaceTableViewController else { return }
         
         newPlaceVC.savePlace()
-      //  places.append(newPlaceVC.newPlace!) //передача данных с одного view  на другой
+        //  places.append(newPlaceVC.newPlace!) //передача данных с одного view  на другой
         tableView.reloadData()
     }
     
     @IBAction func sortSelection(_ sender: UISegmentedControl) {
-        sorting() 
+        sorting()
     }
     
     @IBAction func reversedSorting(_ sender: UIBarButtonItem) {
@@ -129,6 +162,18 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         } else {
             places = places.sorted(byKeyPath: "name", ascending: ascendingSorting)
         }
+        tableView.reloadData()
+    }
+}
+
+extension TableViewController: UISearchResultsUpdating {
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        filterContentForSearch(searchController.searchBar.text!)
+    }
+    
+    private func filterContentForSearch(_ searchText: String){
+        filteredPlaces = places.filter("name CONTAINS[c] %@ OR location CONTAINS[c] %@ ", searchText, searchText) //не зависит от регистра
         tableView.reloadData()
     }
 }
