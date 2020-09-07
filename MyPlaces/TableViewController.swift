@@ -54,25 +54,20 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         if isFiltering {
             return filteredPlaces.count
         }
-        return places.isEmpty ? 0 : places.count
+        return places.count
     }
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! CustomTableViewCell
         
-        var place = Place()
-        
-        if isFiltering{
-            place = filteredPlaces[indexPath.row]
-        } else {
-            place = places[indexPath.row]
-        }
+        let place = isFiltering ? filteredPlaces[indexPath.row] : places[indexPath.row]
         
         cell.nameLabel.text = place.name
         cell.locationLabel.text = place.location
         cell.typeLabel.text = place.type
         cell.imageOfPlace.image = UIImage(data: place.imageData!)
+        cell.cosmosView.rating = place.rating
         
         //        if place.image == nil {
         //            cell.imageOfPlace.image = UIImage(named: place.restaurantImage!)
@@ -80,8 +75,6 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         //            cell.imageOfPlace.image = place.image
         //        }
         
-        cell.imageOfPlace.layer.cornerRadius = cell.imageOfPlace.frame.size.height / 2 //скругление image view
-        cell.imageOfPlace.clipsToBounds = true //обрезка изображения
         
         return cell
     }
@@ -124,12 +117,7 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showDetail" {
             guard let indexPath = tableView.indexPathForSelectedRow else { return }
-            let place: Place
-            if isFiltering{
-                place = filteredPlaces[indexPath.row]
-            } else {
-                place = places[indexPath.row]
-            }
+            let place = isFiltering ? filteredPlaces[indexPath.row] : places[indexPath.row]
             let newPlacesVC = segue.destination as! NewPlaceTableViewController
             newPlacesVC.currentPlace = place
         }
