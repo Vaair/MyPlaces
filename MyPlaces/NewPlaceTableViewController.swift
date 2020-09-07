@@ -24,10 +24,13 @@ class NewPlaceTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        DispatchQueue.main.async { //загрузка в фоновом режиме
-//            self.newPlace.savePlaces()
-//        }
-        tableView.tableFooterView = UIView() //убираем разлиновку пустых строк
+        //        DispatchQueue.main.async { //загрузка в фоновом режиме
+        //            self.newPlace.savePlaces()
+        //        }
+        tableView.tableFooterView = UIView(frame: CGRect(x: 0,
+                                                         y: 0,
+                                                         width: tableView.frame.size.width,
+                                                         height: 1)) //убираем разлиновку пустых строк
         
         saveButton.isEnabled = false
         
@@ -97,14 +100,14 @@ class NewPlaceTableViewController: UITableViewController {
                 currentPlace?.imageData = newPlace.imageData
             }
         } else {
-        StorageManager.saveObject(newPlace)
+            StorageManager.saveObject(newPlace)
         }
         
-//        newPlace = Place(name: placeName.text!, //когда была структурой
-//                         location: placeLocation.text,
-//                         type: placeType.text,
-//                         image: image,
-//                         restaurantImage: nil)
+        //        newPlace = Place(name: placeName.text!, //когда была структурой
+        //                         location: placeLocation.text,
+        //                         type: placeType.text,
+        //                         image: image,
+        //                         restaurantImage: nil)
     }
     
     private func setupEditScreen() {
@@ -118,7 +121,7 @@ class NewPlaceTableViewController: UITableViewController {
             placeName.text = currentPlace?.name
             placeLocation.text = currentPlace?.location
             placeType.text = currentPlace?.type
-
+            
         }
     }
     
