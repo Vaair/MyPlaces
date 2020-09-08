@@ -8,11 +8,13 @@
 
 import UIKit
 import MapKit
+import CoreLocation
 
 class MapViewController: UIViewController {
     
     var place = Place()
     let locationId = "locationId"
+    let locationManager = CLLocationManager()
     
     @IBOutlet weak var mapView: MKMapView!
     
@@ -20,6 +22,7 @@ class MapViewController: UIViewController {
         super.viewDidLoad()
         mapView.delegate = self
         setupPlacemark()
+        checkLocationServices()
     }
     
     
@@ -54,6 +57,38 @@ class MapViewController: UIViewController {
         }
     }
     
+    private func checkLocationServices(){
+        if CLLocationManager.locationServicesEnabled() {
+            setupLocationManager()
+            chechLocationAuthorization()
+        } else {
+            
+        }
+    }
+    
+    private func setupLocationManager() {
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+    }
+    
+    private func chechLocationAuthorization() {
+        switch CLLocationManager.authorizationStatus() {
+        case .authorizedWhenInUse: //когда доступны
+            mapView.showsUserLocation = true
+            break
+        case .denied: //отказано использование служб
+            //show allert controller
+            break
+        case .notDetermined: //неопределенность
+            locationManager.requestWhenInUseAuthorization()
+        case .restricted: //не авторизовано для служб геолокации
+            break
+        case .authorizedAlways:
+            break
+        @unknown default:
+            print("New case is available")
+        }
+    }
 }
 
 extension MapViewController: MKMapViewDelegate {
@@ -76,5 +111,11 @@ extension MapViewController: MKMapViewDelegate {
         }
         
         return annotationView
+    }
+}
+
+extension MapViewController: CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        chechLocationAuthorization()
     }
 }
