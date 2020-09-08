@@ -10,6 +10,7 @@
 		10140ACF5F6582BFA2D633C0 /* Pods_MyPlaces.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E9B41177547191456773BEE /* Pods_MyPlaces.framework */; };
 		3A53C5B925024F2A00DC43E5 /* RetingControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A53C5B825024F2A00DC43E5 /* RetingControl.swift */; };
 		3A64FEB324FF8D1D00A63289 /* PlaceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A64FEB224FF8D1D00A63289 /* PlaceModel.swift */; };
+		3A67DAFF25079B9900762292 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A67DAFE25079B9900762292 /* MapViewController.swift */; };
 		3A69E43D24FEAD15006C7D43 /* CustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A69E43C24FEAD15006C7D43 /* CustomTableViewCell.swift */; };
 		3AB3704C24FFB20F00D87A2B /* NewPlaceTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB3704B24FFB20F00D87A2B /* NewPlaceTableViewController.swift */; };
 		3AB3704E2500034B00D87A2B /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB3704D2500034B00D87A2B /* StorageManager.swift */; };
@@ -24,6 +25,7 @@
 /* Begin PBXFileReference section */
 		3A53C5B825024F2A00DC43E5 /* RetingControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetingControl.swift; sourceTree = "<group>"; };
 		3A64FEB224FF8D1D00A63289 /* PlaceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceModel.swift; sourceTree = "<group>"; };
+		3A67DAFE25079B9900762292 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		3A69E43C24FEAD15006C7D43 /* CustomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableViewCell.swift; sourceTree = "<group>"; };
 		3AB3704B24FFB20F00D87A2B /* NewPlaceTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPlaceTableViewController.swift; sourceTree = "<group>"; };
 		3AB3704D2500034B00D87A2B /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
@@ -81,6 +83,7 @@
 				3A69E43C24FEAD15006C7D43 /* CustomTableViewCell.swift */,
 				3AB3704B24FFB20F00D87A2B /* NewPlaceTableViewController.swift */,
 				3A53C5B825024F2A00DC43E5 /* RetingControl.swift */,
+				3A67DAFE25079B9900762292 /* MapViewController.swift */,
 				3AC8C5D724FE40F700C79D9C /* Main.storyboard */,
 				3AC8C5DA24FE40F900C79D9C /* Assets.xcassets */,
 				3AC8C5DC24FE40F900C79D9C /* LaunchScreen.storyboard */,
@@ -225,6 +228,7 @@
 				3AB3704C24FFB20F00D87A2B /* NewPlaceTableViewController.swift in Sources */,
 				3AC8C5D224FE40F700C79D9C /* AppDelegate.swift in Sources */,
 				3AC8C5E824FE575D00C79D9C /* TableViewController.swift in Sources */,
+				3A67DAFF25079B9900762292 /* MapViewController.swift in Sources */,
 				3AB3704E2500034B00D87A2B /* StorageManager.swift in Sources */,
 				3A64FEB324FF8D1D00A63289 /* PlaceModel.swift in Sources */,
 				3A69E43D24FEAD15006C7D43 /* CustomTableViewCell.swift in Sources */,
