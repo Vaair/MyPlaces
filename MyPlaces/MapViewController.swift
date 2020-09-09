@@ -10,34 +10,50 @@ import UIKit
 import MapKit
 import CoreLocation
 
+protocol MapViewControllerDelegete {
+    func getAddress(_ address: String)
+}
+
 class MapViewController: UIViewController {
     
     var place = Place()
     let locationId = "locationId"
     let locationManager = CLLocationManager()
     let regionInMeters = 10_000.00
+    var incomeSegueId = ""
     
     @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var mapPinImage: UIImageView!
+    @IBOutlet weak var addressLabel: UILabel!
+    @IBOutlet weak var doneButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        addressLabel.text = ""
         mapView.delegate = self
-        setupPlacemark()
+        setupMapView()
         checkLocationServices()
     }
     
     
     @IBAction func centerViewUserLocation() {
-        if let location = locationManager.location?.coordinate {
-            let region = MKCoordinateRegion(center: location,
-                                            latitudinalMeters: regionInMeters,
-                                            longitudinalMeters: regionInMeters)
-            mapView.setRegion(region, animated: true)
-        }
+        showUserLocation()
     }
     
     @IBAction func closeVC() {
         dismiss(animated: true)
+    }
+    
+    @IBAction func doneButtonPressed(_ sender: UIButton) {
+    }
+    
+    private func setupMapView() {
+        if incomeSegueId == "showPlace" {
+            setupPlacemark()
+            mapPinImage.isHidden = true
+            addressLabel.isHidden = true
+            doneButton.isHidden = true
+        }
     }
     
     private func setupPlacemark() {
@@ -88,6 +104,9 @@ class MapViewController: UIViewController {
         switch CLLocationManager.authorizationStatus() {
         case .authorizedWhenInUse: //когда доступны
             mapView.showsUserLocation = true
+            if incomeSegueId == "getAddress" {
+                showUserLocation()
+            }
             break
         case .denied: //отказано использование служб
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
@@ -106,6 +125,23 @@ class MapViewController: UIViewController {
         @unknown default:
             print("New case is available")
         }
+    }
+    
+    
+    private func showUserLocation() {
+        if let location = locationManager.location?.coordinate {
+            let region = MKCoordinateRegion(center: location,
+                                            latitudinalMeters: regionInMeters,
+                                            longitudinalMeters: regionInMeters)
+            mapView.setRegion(region, animated: true)
+        }
+    }
+    
+    private func getCenterLocation(for mapView: MKMapView) -> CLLocation {
+        let latitude = mapView.centerCoordinate.latitude //широта
+        let longitude = mapView.centerCoordinate.longitude //долгота
+        
+        return CLLocation(latitude: latitude, longitude: longitude)
     }
     
     private func showAlert(title: String, message: String) {
@@ -137,6 +173,36 @@ extension MapViewController: MKMapViewDelegate {
         }
         
         return annotationView
+    }
+    
+    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+        let center = getCenterLocation(for: mapView)
+        let geocoder = CLGeocoder()
+        
+        geocoder.reverseGeocodeLocation(center) { (placemarks, error) in
+            if let error = error {
+                print(error)
+                return
+            }
+            
+            guard let placemarks = placemarks else { return }
+            
+            let placemark = placemarks.first
+            let streetName = placemark?.thoroughfare
+            let bildNumber = placemark?.subThoroughfare
+            
+            
+            DispatchQueue.main.async {
+                if streetName != nil && bildNumber != nil {
+                    self.addressLabel.text = "\(streetName!), \(bildNumber!)"
+                } else if streetName != nil {
+                    self.addressLabel.text = "\(streetName!)"
+                } else {
+                    self.addressLabel.text = ""
+                }
+            }
+            
+        }
     }
 }
 
