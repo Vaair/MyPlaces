@@ -9,7 +9,7 @@
 import UIKit
 import Cosmos
 
-class NewPlaceTableViewController: UITableViewController {
+class NewPlaceTableViewController: UITableViewController{
     //var newPlace = Place()
     
     var currentPlace: Place!
@@ -90,6 +90,7 @@ class NewPlaceTableViewController: UITableViewController {
         //        guard segue.identifier == "showMap" else { return }
         
         mapVC.incomeSegueId = id
+        mapVC.mapViewControllerDelegate = self
         //        let mapVC = segue.destination as! MapViewController
         
         if id == "showPlace" {
@@ -203,4 +204,13 @@ extension NewPlaceTableViewController: UIImagePickerControllerDelegate, UINaviga
         
         dismiss(animated: true)
     }
+}
+
+extension NewPlaceTableViewController: MapViewControllerDelegete {
+    
+    func getAddress(_ address: String?) {
+        placeLocation.text = address
+    }
+    
+    
 }

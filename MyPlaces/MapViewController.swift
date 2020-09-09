@@ -11,10 +11,12 @@ import MapKit
 import CoreLocation
 
 protocol MapViewControllerDelegete {
-    func getAddress(_ address: String)
+    func getAddress(_ address: String?)
 }
 
 class MapViewController: UIViewController {
+    
+    var mapViewControllerDelegate: MapViewControllerDelegete?
     
     var place = Place()
     let locationId = "locationId"
@@ -45,6 +47,8 @@ class MapViewController: UIViewController {
     }
     
     @IBAction func doneButtonPressed(_ sender: UIButton) {
+        mapViewControllerDelegate?.getAddress(addressLabel.text)
+        dismiss(animated: true)
     }
     
     private func setupMapView() {
