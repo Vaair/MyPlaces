@@ -20,6 +20,7 @@
 		3AC8C5DB24FE40F900C79D9C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3AC8C5DA24FE40F900C79D9C /* Assets.xcassets */; };
 		3AC8C5DE24FE40F900C79D9C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3AC8C5DC24FE40F900C79D9C /* LaunchScreen.storyboard */; };
 		3AC8C5E824FE575D00C79D9C /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC8C5E724FE575D00C79D9C /* TableViewController.swift */; };
+		3AF0C023250A2E86009A0A3A /* MapManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF0C022250A2E86009A0A3A /* MapManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +38,7 @@
 		3AC8C5DD24FE40F900C79D9C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3AC8C5DF24FE40F900C79D9C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3AC8C5E724FE575D00C79D9C /* TableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
+		3AF0C022250A2E86009A0A3A /* MapManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapManager.swift; sourceTree = "<group>"; };
 		7E9B41177547191456773BEE /* Pods_MyPlaces.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MyPlaces.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		936D64FBC1ECDC0313296C79 /* Pods-MyPlaces.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyPlaces.release.xcconfig"; path = "Target Support Files/Pods-MyPlaces/Pods-MyPlaces.release.xcconfig"; sourceTree = "<group>"; };
 		E4F796120C91D36D313FF383 /* Pods-MyPlaces.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyPlaces.debug.xcconfig"; path = "Target Support Files/Pods-MyPlaces/Pods-MyPlaces.debug.xcconfig"; sourceTree = "<group>"; };
@@ -75,21 +77,54 @@
 		3AC8C5D024FE40F700C79D9C /* MyPlaces */ = {
 			isa = PBXGroup;
 			children = (
-				3AC8C5D124FE40F700C79D9C /* AppDelegate.swift */,
-				3AC8C5D324FE40F700C79D9C /* SceneDelegate.swift */,
-				3AC8C5E724FE575D00C79D9C /* TableViewController.swift */,
-				3A64FEB224FF8D1D00A63289 /* PlaceModel.swift */,
-				3AB3704D2500034B00D87A2B /* StorageManager.swift */,
-				3A69E43C24FEAD15006C7D43 /* CustomTableViewCell.swift */,
-				3AB3704B24FFB20F00D87A2B /* NewPlaceTableViewController.swift */,
-				3A53C5B825024F2A00DC43E5 /* RetingControl.swift */,
-				3A67DAFE25079B9900762292 /* MapViewController.swift */,
-				3AC8C5D724FE40F700C79D9C /* Main.storyboard */,
-				3AC8C5DA24FE40F900C79D9C /* Assets.xcassets */,
-				3AC8C5DC24FE40F900C79D9C /* LaunchScreen.storyboard */,
+				3AF0C024250A4357009A0A3A /* ViewControllers */,
+				3AF0C026250A43DD009A0A3A /* Helpers */,
+				3AF0C025250A43B3009A0A3A /* Models */,
+				3AF0C027250A4407009A0A3A /* Support Files */,
 				3AC8C5DF24FE40F900C79D9C /* Info.plist */,
+				3AC8C5D724FE40F700C79D9C /* Main.storyboard */,
+				3AC8C5DC24FE40F900C79D9C /* LaunchScreen.storyboard */,
 			);
 			path = MyPlaces;
+			sourceTree = "<group>";
+		};
+		3AF0C024250A4357009A0A3A /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				3AC8C5E724FE575D00C79D9C /* TableViewController.swift */,
+				3AB3704B24FFB20F00D87A2B /* NewPlaceTableViewController.swift */,
+				3A67DAFE25079B9900762292 /* MapViewController.swift */,
+				3A69E43C24FEAD15006C7D43 /* CustomTableViewCell.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		3AF0C025250A43B3009A0A3A /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				3A64FEB224FF8D1D00A63289 /* PlaceModel.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		3AF0C026250A43DD009A0A3A /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				3AF0C022250A2E86009A0A3A /* MapManager.swift */,
+				3AB3704D2500034B00D87A2B /* StorageManager.swift */,
+				3A53C5B825024F2A00DC43E5 /* RetingControl.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		3AF0C027250A4407009A0A3A /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				3AC8C5D324FE40F700C79D9C /* SceneDelegate.swift */,
+				3AC8C5D124FE40F700C79D9C /* AppDelegate.swift */,
+				3AC8C5DA24FE40F900C79D9C /* Assets.xcassets */,
+			);
+			path = "Support Files";
 			sourceTree = "<group>";
 		};
 		43F43095BCC5775D2C3938FC /* Pods */ = {
@@ -230,6 +265,7 @@
 				3AC8C5E824FE575D00C79D9C /* TableViewController.swift in Sources */,
 				3A67DAFF25079B9900762292 /* MapViewController.swift in Sources */,
 				3AB3704E2500034B00D87A2B /* StorageManager.swift in Sources */,
+				3AF0C023250A2E86009A0A3A /* MapManager.swift in Sources */,
 				3A64FEB324FF8D1D00A63289 /* PlaceModel.swift in Sources */,
 				3A69E43D24FEAD15006C7D43 /* CustomTableViewCell.swift in Sources */,
 				3AC8C5D424FE40F700C79D9C /* SceneDelegate.swift in Sources */,
